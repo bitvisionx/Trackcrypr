@@ -1,0 +1,10 @@
+{
+  "name": "Crypto Tracker",
+  "short_name": "CryptoTracker",
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "#000000",
+  "theme_color": "#000000",
+  "description": "Volg je crypto-aankopen in Blox en Bitvavo met live prijzen.",
+  "lang": "nl"
+}
