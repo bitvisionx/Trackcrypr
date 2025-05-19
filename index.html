@@ -2,29 +2,26 @@
 <html lang="nl">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Crypto Tracker</title>
   <link rel="stylesheet" href="style.css" />
-  <link rel="manifest" href="manifest.json" />
 </head>
 <body>
   <h1>Crypto Tracker</h1>
 
-  <div id="sections">
-    <div class="wallet" id="blox">
-      <h2>Blox</h2>
-      <div class="coin-list" id="blox-coins"></div>
-      <button onclick="addCoin('blox')">+ Voeg munt toe aan Blox</button>
-      <div id="blox-total" class="totals"></div>
-    </div>
+  <section>
+    <h2>Blox</h2>
+    <button onclick="addCoin('blox')">Nieuwe aankoop toevoegen</button>
+    <div id="blox-coins"></div>
+    <div id="blox-total" style="margin-top:10px; font-weight:bold;"></div>
+  </section>
 
-    <div class="wallet" id="bitvavo">
-      <h2>Bitvavo</h2>
-      <div class="coin-list" id="bitvavo-coins"></div>
-      <button onclick="addCoin('bitvavo')">+ Voeg munt toe aan Bitvavo</button>
-      <div id="bitvavo-total" class="totals"></div>
-    </div>
-  </div>
+  <section style="margin-top:30px;">
+    <h2>Bitvavo</h2>
+    <button onclick="addCoin('bitvavo')">Nieuwe aankoop toevoegen</button>
+    <div id="bitvavo-coins"></div>
+    <div id="bitvavo-total" style="margin-top:10px; font-weight:bold;"></div>
+  </section>
 
   <script src="script.js"></script>
 </body>
