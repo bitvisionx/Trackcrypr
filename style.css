@@ -1,56 +1,43 @@
 body {
-  background-color: #000;
-  color: #ff0;
+  background: black;
+  color: yellow;
   font-family: Arial, sans-serif;
-  margin: 0;
   padding: 20px;
 }
 
-h1 {
-  text-align: center;
-  font-size: 2em;
-}
-
-.wallet {
-  border: 2px solid #ff0;
-  padding: 15px;
-  margin-bottom: 30px;
-}
-
-.coin-list {
-  margin-top: 10px;
-}
-
-.coin {
-  border: 1px dashed #ff0;
-  padding: 10px;
+h1, h2 {
   margin-bottom: 10px;
 }
 
 button {
-  background-color: #222;
-  color: #ff0;
-  border: 1px solid #ff0;
-  padding: 10px;
+  margin-bottom: 15px;
+  padding: 8px 15px;
+  background: yellow;
+  color: black;
+  border: none;
   cursor: pointer;
-  margin-top: 10px;
+  font-weight: bold;
+  border-radius: 4px;
 }
 
 button:hover {
-  background-color: #444;
+  background: gold;
 }
 
-.totals {
-  margin-top: 10px;
+.coin {
+  background: #222;
+  border: 1px solid yellow;
+  padding: 10px;
+  margin-bottom: 10px;
+  border-radius: 4px;
+}
+
+.total {
   font-weight: bold;
+  margin-top: 15px;
   font-size: 1.1em;
 }
 
-input {
-  background-color: #111;
-  border: 1px solid #ff0;
-  color: #ff0;
-  padding: 5px;
-  margin-right: 5px;
-  margin-top: 5px;
+strong {
+  font-weight: bold;
 }
