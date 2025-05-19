@@ -1,5 +1,4 @@
 const API_BASE = "https://api.coingecko.com/api/v3";
-let coinsData = {};
 let wallets = {
   blox: [],
   bitvavo: []
@@ -16,8 +15,7 @@ function loadData() {
 
 async function fetchCoinList() {
   const res = await fetch(`${API_BASE}/coins/list`);
-  const allCoins = await res.json();
-  return allCoins;
+  return await res.json();
 }
 
 async function fetchPrice(id) {
@@ -27,8 +25,8 @@ async function fetchPrice(id) {
 }
 
 function getCoinIdBySymbol(symbol, coinList) {
-  const coin = coinList.find(c => c.symbol.toLowerCase() === symbol.toLowerCase());
-  return coin ? coin.id : null;
+  const match = coinList.find(c => c.symbol.toLowerCase() === symbol.toLowerCase());
+  return match ? match.id : null;
 }
 
 function render() {
@@ -36,22 +34,22 @@ function render() {
     const container = document.getElementById(`${platform}-coins`);
     container.innerHTML = "";
     let totalInvested = 0;
-    let totalNow = 0;
+    let totalCurrent = 0;
 
     wallets[platform].forEach((entry, index) => {
-      const valueNow = entry.currentPrice * entry.amount;
-      const profit = valueNow - entry.totalValue;
-      totalInvested += entry.totalValue;
-      totalNow += valueNow;
+      const currentValue = entry.amount * entry.currentPrice;
+      const profit = currentValue - entry.totalInvested;
+      totalInvested += entry.totalInvested;
+      totalCurrent += currentValue;
 
       const div = document.createElement("div");
       div.className = "coin";
       div.innerHTML = `
         <strong>${entry.name}</strong><br/>
-        Aantal: ${entry.amount} ${entry.symbol.toUpperCase()}<br/>
-        Prijs per stuk bij aankoop: €${entry.buyPrice.toFixed(2)}<br/>
-        Totale aankoopwaarde: €${entry.totalValue.toFixed(2)}<br/>
-        Huidige waarde: €${valueNow.toFixed(2)}<br/>
+        Hoeveelheid: ${entry.amount} ${entry.symbol.toUpperCase()}<br/>
+        Totale aankoopprijs: €${entry.totalInvested.toFixed(2)}<br/>
+        Aankoopprijs per stuk: €${entry.buyPrice.toFixed(2)}<br/>
+        Huidige waarde: €${currentValue.toFixed(2)}<br/>
         Winst/verlies: <strong style="color:${profit >= 0 ? 'lime' : 'red'}">€${profit.toFixed(2)}</strong>
         <br/><button onclick="removeCoin('${platform}', ${index})">Verwijderen</button>
       `;
@@ -59,23 +57,26 @@ function render() {
     });
 
     document.getElementById(`${platform}-total`).innerHTML = `
-      Totale aankoopwaarde: €${totalInvested.toFixed(2)}<br/>
-      Totale huidige waarde: €${totalNow.toFixed(2)}<br/>
-      Totaal winst/verlies: <strong style="color:${(totalNow - totalInvested) >= 0 ? 'lime' : 'red'}">€${(totalNow - totalInvested).toFixed(2)}</strong>
+      Totale investering: €${totalInvested.toFixed(2)}<br/>
+      Totale waarde nu: €${totalCurrent.toFixed(2)}<br/>
+      Totaal winst/verlies: <strong style="color:${(totalCurrent - totalInvested) >= 0 ? 'lime' : 'red'}">
+        €${(totalCurrent - totalInvested).toFixed(2)}
+      </strong>
     `;
   });
 }
 
 async function addCoin(platform) {
-  const symbol = prompt("Welke munt (bv: BTC)?").toLowerCase();
-  const amount = parseFloat(prompt("Hoeveel heb je gekocht (bv: 0.5)?"));
-  const buyPrice = parseFloat(prompt("Wat was de aankoopprijs per stuk in euro?"));
+  const symbol = prompt("Welke munt wil je toevoegen (bijv. BTC)?").toLowerCase();
+  const amount = parseFloat(prompt("Hoeveel munt heb je gekocht (bijv. 0.5)?"));
+  const totalInvested = parseFloat(prompt("Wat is het totale bedrag in euro dat je hebt betaald voor deze aankoop?"));
 
-  if (!symbol || isNaN(amount) || isNaN(buyPrice)) return alert("Ongeldige invoer.");
+  if (!symbol || isNaN(amount) || isNaN(totalInvested) || amount <= 0 || totalInvested <= 0) {
+    return alert("Ongeldige invoer.");
+  }
 
   const coinList = await fetchCoinList();
   const id = getCoinIdBySymbol(symbol, coinList);
-
   if (!id) return alert("Munt niet gevonden via CoinGecko.");
 
   const currentPrice = await fetchPrice(id);
@@ -85,8 +86,8 @@ async function addCoin(platform) {
     symbol,
     name,
     amount,
-    buyPrice,
-    totalValue: amount * buyPrice,
+    totalInvested,
+    buyPrice: totalInvested / amount,
     currentPrice
   });
 
